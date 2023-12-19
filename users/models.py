@@ -36,6 +36,8 @@ class UserProfiles(models.Model):
     responsible_person = models.ForeignKey(ResponsiblePerson, on_delete=models.SET_NULL,
                                            null=True)  # Ответственное лицо
     bitrix_id = models.CharField(max_length=100, null=True, blank=True)  # ID в системе Битрикс
+    last_question_id = models.IntegerField(default=0)
+    last_question_id_kmb = models.IntegerField(default=0)
 
     def __str__(self):
         return self.full_name

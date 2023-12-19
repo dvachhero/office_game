@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Контент{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<div>
+    <h1>Контент:</h1>
+    {% for content in contents %}
+        <div id="chat-box" style="border:2px solid #FFF9CF; padding:10px; min-height:200px; max-height: 400px; overflow-y: auto; margin-bottom: 20px; border-radius: 10px;">
+            {% if content.image_url %}
+                <img src="{{ content.image_url }}" alt="Изображение" style="max-width: 100%; height: auto;">
+            {% endif %}
+            {% if content.video_url %}
+                <video width="100%" controls>
+                    <source src="{{ content.video_url }}" type="video/mp4">
+                    Ваш браузер не поддерживает видео тег.
+                </video>
+            {% endif %}
+            <p>{{ content.text }}</p>
+        </div>
+    {% endfor %}
+
+<div class="pagination" style="text-align: center; margin-top: 20px; display: flex; justify-content: center; align-items: center;">
+    {% if contents.has_previous or contents.has_next %}
+        {% if contents.has_previous %}
+            <a href="?page={{ contents.previous_page_number }}" class="btn" style="flex: 1; {% if not contents.has_next %}width: 100%;{% else %}margin-right: 5px;{% endif %}">Назад</a>
+        {% endif %}
+
+        {% if contents.has_next %}
+            <a href="?page={{ contents.next_page_number }}" class="btn" style="flex: 1; {% if not contents.has_previous %}width: 100%;{% else %}margin-left: 5px;{% endif %}">Далее</a>
+        {% endif %}
+    {% endif %}
+</div>
+
+<a href="{% url 'kmbsubmenu' button_id %}" class="btn">Назад к темам</a>
+{% endblock %}

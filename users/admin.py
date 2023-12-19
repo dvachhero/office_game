@@ -23,7 +23,7 @@ class ResponsiblePersonAdmin(admin.ModelAdmin):
 # Регистрируем модель UserProfiles для админ-панели
 @admin.register(UserProfiles)
 class UserProfilesAdmin(admin.ModelAdmin):
-    list_display = ('user', 'full_name', 'division', 'city', 'position', 'responsible_person', 'bitrix_id')
-    search_fields = ('full_name', 'city', 'bitrix_id')
-    list_filter = ('division', 'position', 'city')
+    list_display = ('user', 'full_name', 'division', 'city', 'position', 'last_question_id', 'last_question_id_kmb', 'responsible_person', 'bitrix_id')
+    search_fields = ('full_name', 'city', 'last_question_id', 'last_question_id_kmb', 'bitrix_id')
+    list_filter = ('division', 'position',  'city', 'last_question_id', 'last_question_id_kmb')
 

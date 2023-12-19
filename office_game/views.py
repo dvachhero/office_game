@@ -14,3 +14,8 @@ def home(request):
 def logout_view(request):
     logout(request)
     return redirect('/office_game/login')
+
+@login_required(login_url='login')
+def rules(request):
+    return render(request, 'rules.html')
+
