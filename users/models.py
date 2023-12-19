@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class Division(models.Model):
@@ -28,7 +30,7 @@ class ResponsiblePerson(models.Model):
 
 
 class UserProfiles(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Связь с моделью пользователя Django
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')  # Связь с моделью пользователя Django
     full_name = models.CharField(max_length=200)  # Полное ФИО
     division = models.ForeignKey(Division, on_delete=models.SET_NULL, null=True)  # Дивизион
     city = models.CharField(max_length=100)  # Город
@@ -41,3 +43,10 @@ class UserProfiles(models.Model):
 
     def __str__(self):
         return self.full_name
+
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfiles.objects.create(user=instance, last_question_id=0, last_question_id_kmb=0)
+    else:
+        instance.profile.save()

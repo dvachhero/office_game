@@ -10,6 +10,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
 
 
+
 @login_required
 def game_menu(request):
     return render(request, 'gamemenu.html')

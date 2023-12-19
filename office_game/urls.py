@@ -25,5 +25,4 @@ urlpatterns = [
     path('office_game/gamekmb/', game_kmb, name='game_kmb'),
     path('office_game/resultinfokmb/', resultinfo_kmb, name='resultinfo_kmb'),
     path('office_game/user_results_kmb/', user_results_kmb, name='user_results_kmb')
-
 ]

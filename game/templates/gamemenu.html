@@ -14,6 +14,9 @@
 {% block content %}
   <h1>Выбор режима игры</h1>
   <div class="menu">
+    <button onclick="window.location.href='{% url 'game' %}'">Режим старт</button>
+    <button onclick="window.location.href='{% url 'gametraining' %}'">Режим тренировка</button>
+    <button onclick="window.location.href='{% url 'user_results' %}'">Результаты</button>
     <button onclick="window.location.href='{% url 'home' %}'">Вернуться в меню приложения</button>
   </div>
 {% endblock %}
