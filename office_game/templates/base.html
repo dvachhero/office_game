@@ -9,7 +9,10 @@
         <link rel="shortcut icon" href="{% static 'icons/favicon.ico' %}">
         <style>
             body {
-                background-color: #333333;
+                background-image: url("{% static 'images/bg.png' %}");
+                background-size: cover; /* Растягивает изображение, чтобы оно занимало всю площадь фона */
+                background-repeat: no-repeat; /* Запрет повтора изображения */
+                background-attachment: fixed; /* Фиксированный фон при прокрутке */
                 color: #FFF9CF;
                 margin: 0;
                 font-family: Finlandica, sans-serif;
@@ -24,9 +27,10 @@
                 flex-direction: column;
             }
 
+
             .header img {
-                height: 350px;
-                width: 550px;
+                height: 230px;
+                width: 400px;
                 margin-right: 0px;
             }
 
@@ -38,7 +42,7 @@
 
             .subtext {
                 font-size: 1.0em;
-                margin-top: 5px;
+                margin-top: 0px;
                 line-height: 30px;
                 text-align: center;
             }
@@ -55,22 +59,24 @@
 
             .container {
                 text-align: center;
-                max-width: 600px;
+                max-width: 500px;
                 margin: 25px auto;
                 padding: 30px;
+                border: 2px solid #FFF9CF;
                 border-radius: 10px;
-                background-color: rgba(0, 0, 0, 0.2);
+                background-color: #333333;
             }
 
             h1 {
                 font-size: 1em;
                 margin-bottom: 20px;
+
             }
 
             input[type="file"], input[type="submit"], .btn {
                 padding: 10px 20px;
                 font-size: 1em;
-                border: none;
+                border: none #333333;
                 border-radius: 5px;
                 cursor: pointer;
                 background-color: #FFF9CF;
@@ -87,7 +93,7 @@
             button[type="submit"] {
                 padding: 10px 20px;
                 font-size: 1em;
-                border: none;
+                border: none #333333;
                 border-radius: 5px;
                 cursor: pointer;
                 background-color: #FFF9CF;
@@ -104,6 +110,7 @@
             input[type="submit"]:hover, .btn:hover {
                 background-color: #333333;
                 color: #FFF9CF;
+                border: 1px solid #FFF9CF;
             }
 
             .instruction-btn {
@@ -132,6 +139,7 @@
             button:hover {
                  background-color: #333333;
                  color: #FFF9CF;
+                 border: 1px solid #FFF9CF;
             }
 
             input[type="text"], input[type="password"] {
@@ -188,15 +196,17 @@
         </style>
     </head>
     <body>
-        <div class="header">
+            <div class="header">
                 {% block header %}
-            <div class="logo-container">
-                <img src="{% block logo %}https://i.ibb.co/FXFR9nZ/image.png{% endblock %}" alt="logo">
-            </div>
-                <div class="header-text">{% block header_text %}KIT: СКЛАД{% endblock %}</div>
-                <div class="subtext">{% block subtext %}Добро пожаловать{% endblock %}</div>
+                <div class="header-content">
+                    <div class="logo-container">
+                        <img src="{% block logo %}https://i.ibb.co/FXFR9nZ/image.png{% endblock %}" alt="logo">
+                    </div>
+                    <div class="header-text">{% block header_text %}KIT: СКЛАД{% endblock %}</div>
+                    <div class="subtext">{% block subtext %}Добро пожаловать{% endblock %}</div>
+                </div>
                 {% endblock %}
-        </div>
+            </div>
             <div class="container">
                 {% block content %}
                 {% endblock %}
