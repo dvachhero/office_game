@@ -1,0 +1,19 @@
+<!-- home.html -->
+{% extends 'base.html' %}
+
+  <div class="header">
+          {% block header %}
+          <div class="logo-container">
+              <img src="{% block logo %}https://i.ibb.co/FXFR9nZ/image.png{% endblock %}" alt="logo">
+          </div>
+          <div class="header-text">{% block header_text %}KIT: ОФИС{% endblock %}</div>
+          <div class="subtext">{% block subtext %}Привет Админ!{% endblock %}</div>
+          {% endblock %}
+  </div>
+
+
+    {% block content %}
+    <h1>Меню приложения</h1>
+    <div class="menu">
+    </div>
+{% endblock %}

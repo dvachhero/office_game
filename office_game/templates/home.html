@@ -1,16 +1,15 @@
 <!-- home.html -->
 {% extends 'base.html' %}
 
-  <div class="header">
-          {% block header %}
-          <div class="logo-container">
-              <img src="{% block logo %}https://i.ibb.co/FXFR9nZ/image.png{% endblock %}" alt="logo">
-          </div>
-          <div class="header-text">{% block header_text %}KIT: ОФИС{% endblock %}</div>
-          <div class="subtext">{% block subtext %}Выберите режим игры:{% endblock %}</div>
-          {% endblock %}
-  </div>
-
+    <div class="header">
+        {% block header %}
+        <div class="logo-container">
+            <img src="{% block logo %}https://i.ibb.co/FXFR9nZ/image.png{% endblock %}" alt="logo">
+        </div>
+        <div class="header-text">{% block header_text %}KIT: ОФИС{% endblock %}</div>
+        <div class="subtext">{% block subtext %}Выберите режим игры:{% endblock %}</div>
+        {% endblock %}
+    </div>
 
     {% block content %}
     <h1>Меню приложения</h1>
@@ -19,5 +18,9 @@
       <button onclick="window.location.href='{% url 'kmb' %}'">Курс молодого бойца</button>
       <button onclick="window.location.href='{% url 'rules' %}'">Правила</button>
       <button onclick="window.location.href='{% url 'logout' %}'">Выйти из приложения</button>
+
+      {% if request.user.is_staff %}
+      <button onclick="window.location.href='{% url 'adminmenu' %}'">Администраторское меню</button>
+      {% endif %}
     </div>
-{% endblock %}
+    {% endblock %}
