@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<div>
+<div class="container">
     <h1>Контент:</h1>
     {% for content in contents %}
         <div id="chat-box" style="border:1px solid #FFF9CF; padding:10px; min-height:200px; max-height: 400px; overflow-y: auto; margin-bottom: 20px; border-radius: 10px;">
@@ -22,7 +22,6 @@
             <p>{{ content.text }}</p>
         </div>
     {% endfor %}
-
 <div class="pagination" style="text-align: center; margin-top: 20px; display: flex; justify-content: center; align-items: center;">
     {% if contents.has_previous or contents.has_next %}
         {% if contents.has_previous %}
@@ -34,6 +33,6 @@
         {% endif %}
     {% endif %}
 </div>
-
 <a href="{% url 'kmbsubmenu' button_id %}" class="btn">Назад к темам</a>
+</div>
 {% endblock %}

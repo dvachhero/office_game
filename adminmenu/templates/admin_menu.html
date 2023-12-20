@@ -13,7 +13,13 @@
 
 
     {% block content %}
-    <h1>Меню приложения</h1>
+<div class="container">
+    <h1>Меню Администратора</h1>
     <div class="menu">
+        <button onclick="window.location.href='{% url 'send_message_b24' %}'">Отправка сообщений пользователям</button>
+        <button onclick="window.location.href='{% url 'send_result_b24' %}'">Отправка результатов пользователям</button>
+        <button onclick="window.location.href='{% url 'home' %}'">Вернуться в меню приложения</button>
     </div>
+</div>
 {% endblock %}
+

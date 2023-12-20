@@ -6,6 +6,7 @@ from django.contrib.auth import views as auth_views
 from game.views import game, user_results, resultinfo, game_training, result_info_training, game_kmb, resultinfo_kmb, user_results_kmb
 from tutorial.views import kmb_view, kmbsubmenu_view, content_view
 from adminmenu.views import admin_menu
+from adminmenu.views import send_message_b24, send_result_b24
 
 urlpatterns = [
     path('office_game/admin/', admin.site.urls, name='admin'),
@@ -27,4 +28,6 @@ urlpatterns = [
     path('office_game/resultinfokmb/', resultinfo_kmb, name='resultinfo_kmb'),
     path('office_game/user_results_kmb/', user_results_kmb, name='user_results_kmb'),
     path('office_game/adminmenu/', admin_menu, name='adminmenu'),
+    path('office_game/send_message_b24/', send_message_b24, name='send_message_b24'),
+    path('office_game/send_result_b24/', send_result_b24, name='send_result_b24'),
 ]

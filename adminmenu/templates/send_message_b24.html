@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .wide-container {
+        max-width: 50%; /* Снимаем ограничение ширины */
+        overflow-x: auto; /* Добавляем горизонтальный скролл при необходимости */
+        background-color: #333333;
+        border: 2px solid #FFF9CF;
+        border-radius: 10px;
+        padding: 50px;
+        margin: 25px auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        padding: 10px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 0px;
+        margin-top: 15px;
+        border: 1px solid #333333;
+        background-color: #FFF9CF;
+        font-size: 1.3em;
+        color: #333333;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #FFF9CF;
+        color: #333333;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-top: 15px;
+        margin-bottom: 20px;
+        text-align: center;
+        text-decoration: none;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    button:hover {
+        background-color: #333333;
+        color: #FFF9CF;
+        border: 1px solid #FFF9CF;
+    }
+</style>
+
+<div class="wide-container">
+    <form id="messageForm">
+        <table>
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="selectAll"></th>
+                    <th>ФИО</th>
+                    <th>Дивизион</th>
+                    <th>Город</th>
+                    <th>Должность</th>
+                    <th>Ответственное лицо</th>
+                    <th>Битрикс ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in profiles %}
+                <tr>
+                    <td><input type="checkbox" class="profileCheckbox" value="{{ profile.bitrix_id }}"></td>
+                    <td>{{ profile.full_name }}</td>
+                    <td>{{ profile.division }}</td>
+                    <td>{{ profile.city }}</td>
+                    <td>{{ profile.position }}</td>
+                    <td>{{ profile.responsible_person }}</td>
+                    <td>{{ profile.bitrix_id }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <textarea name="message" placeholder="Введите сообщение"></textarea>
+        <button type="button" onclick="sendMessage()">Отправить сообщение</button>
+    </form>
+
+
+<script>
+    document.getElementById('selectAll').addEventListener('change', function (e) {
+        var checkboxes = document.getElementsByClassName('profileCheckbox');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = e.target.checked;
+        }
+    });
+
+    function sendMessage() {
+        var selectedProfiles = document.querySelectorAll('.profileCheckbox:checked');
+        var message = document.querySelector('[name="message"]').value;
+
+        selectedProfiles.forEach(function(profile, index) {
+            var bitrixId = profile.value;
+            var url = "https://portal.tk-kit.net/rest/15946/i6gqvnma9qmxt8ur/im.message.add.json?DIALOG_ID=" + bitrixId + "&MESSAGE=" + encodeURIComponent(message);
+
+            fetch(url, {
+                method: 'GET', // Или 'POST', зависит от API
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Добавьте CSRF токен здесь, если он требуется
+                },
+                // mode: 'cors', // Раскомментируйте для CORS, если необходимо
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                if (index === selectedProfiles.length - 1) {
+                    alert('Все сообщения успешно отправлены.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Ошибка при отправке сообщения.');
+            });
+        });
+    }
+</script>
+
+<button onclick="window.location.href='{% url 'adminmenu' %}'">Вернуться в администраторское меню</button>
+    </div>
+{% endblock %}
