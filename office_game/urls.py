@@ -30,4 +30,5 @@ urlpatterns = [
     path('office_game/adminmenu/', admin_menu, name='adminmenu'),
     path('office_game/send_message_b24/', send_message_b24, name='send_message_b24'),
     path('office_game/send_result_b24/', send_result_b24, name='send_result_b24'),
+    path('office_game/', home, name='home'),
 ]

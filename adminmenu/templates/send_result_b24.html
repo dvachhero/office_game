@@ -26,11 +26,11 @@
     }
 
     tr:nth-child(even) {
-        background-color: #f2f2f2;
+        background-color: #333333;
     }
 
     tr:hover {
-        background-color: #ddd;
+        background-color: #333333;
     }
 
     textarea {
@@ -108,48 +108,47 @@
     });
 
     // Функция отправки сообщений
-    function sendMessage() {
-        var selectedUsers = document.querySelectorAll('.userCheckbox:checked');
-        var baseMessage = document.querySelector('[name="message"]').value;
+function sendMessage() {
+    var selectedUsers = document.querySelectorAll('.userCheckbox:checked');
 
-        selectedUsers.forEach(function(user) {
-            // Получение дополнительных данных для каждого пользователя
-            var bitrixId = user.value;
-            var userRow = user.closest('tr');
-            var questionText = userRow.cells[3].innerText;
-            var userAnswer = userRow.cells[4].innerText;
-            var rightAnswer = userRow.cells[5].innerText;
-            var correctCount = userRow.cells[6].innerText.split('/')[0].trim();
-            var incorrectCount = userRow.cells[6].innerText.split('/')[1].trim();
+    selectedUsers.forEach(function(user) {
+        var bitrixId = user.value;
+        var userRow = user.closest('tr');
+        var questionText = userRow.cells[3].innerText;
+        var userAnswer = userRow.cells[4].innerText;
+        var rightAnswer = userRow.cells[5].innerText;
+        var correctCount = userRow.cells[6].innerText.split('/')[0].trim();
+        var incorrectCount = userRow.cells[6].innerText.split('/')[1].trim();
 
-            // Формирование персонализированного сообщения
-            var customMessage = baseMessage + " Вопрос: " + questionText + ", твой ответ: " + userAnswer + ", правильный ответ: " + rightAnswer;
-            customMessage += ". Правильных: " + correctCount + ", неправильных: " + incorrectCount;
+            var customMessage = "Привет! Твои результаты теста:\nВопрос: " + questionText +
+                                "\nТвой ответ:" + userAnswer +
+                                "\nПравильный ответ: " + rightAnswer +
+                                "\nПравильных: " + correctCount +
+                                "\nНеправильных: " + incorrectCount;
 
-            // Формирование URL для отправки сообщения
-            var url = "https://portal.tk-kit.net/rest/.../im.message.add.json?DIALOG_ID=" + bitrixId + "&MESSAGE=" + encodeURIComponent(customMessage);
+        var url = "https://portal.tk-kit.net/rest/15946/i6gqvnma9qmxt8ur/im.message.add.json?DIALOG_ID=" + bitrixId + "&MESSAGE=" + encodeURIComponent(customMessage);
 
-            // Отправка сообщения
-            fetch(url, {
-                method: 'GET', // или 'POST', в зависимости от API
-                headers: {
-                    'Content-Type': 'application/json',
-                    // Добавьте CSRF токен здесь, если он требуется
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
+    });
 
-        if (selectedUsers.length > 0) {
-            alert('Сообщения отправлены.');
-        }
+    if (selectedUsers.length > 0) {
+        alert('Сообщения отправлены.');
+    } else {
+        console.log("Не выбраны пользователи для отправки");
     }
+}
 </script>
 
      <button onclick="window.location.href='{% url 'adminmenu' %}'">Вернуться в администраторское меню</button>

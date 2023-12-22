@@ -38,4 +38,6 @@ def send_result_b24(request):
             'user_correct_answers': user_correct_answers[user_id]
         })
 
+    results = sorted(results, key=lambda x: (x['full_name'], x['question_text']))
+
     return render(request, 'send_result_b24.html', {'results': results})
