@@ -1,0 +1,85 @@
+{% extends 'base.html' %} <!-- Замените на имя вашего базового шаблона -->
+
+{% block title %}Чат-бот{% endblock %}
+
+{% block header %}
+    <!-- Пустой блок, убирает весь header -->
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<div id="chat-box" style="border:2px solid #FFF9CF; padding:15px; min-height:200px; max-height: 400px; margin-bottom: 20px; border-radius: 10px;">
+    <!-- Сообщения чата будут здесь -->
+    <img src="http://94.241.138.149/static/kitmentoroffice.png" alt="Заглушка" style="max-width: 100%; height: auto;">
+    <p style="color:#FFF9CF; text-align: center;">Какой у вас вопрос?</p>
+</div>
+
+<div>
+    {% for button in buttons %}
+        <!-- Кнопка для отображения подменю и содержимого -->
+        <button class="btn" type="button" onclick="showSubMenu('submenu-{{ button.id }}', '{{ button.response_text|escapejs }}', '{{ button.image_url }}')">
+            {{ button.title }}
+        </button>
+
+        <!-- Скрытое подменю для каждой кнопки -->
+        <div id="submenu-{{ button.id }}" class="submenu" style="display:none; margin-bottom:10px;">
+            {% for submenu in button.submenus.all %}
+                <!-- Кнопка внутри подменю -->
+                <button class="btn" onclick="showResponse('{{ submenu.response_text|escapejs }}', '{{ submenu.image_url }}')">
+                    {{ submenu.title }}
+                </button>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+<button onclick="window.location.href='{% url 'home' %}'">Вернуться в меню</button>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function showSubMenu(submenuId, responseText, imageUrl) {
+        // Отображение содержимого кнопки верхнего уровня
+        showResponse(responseText, imageUrl);
+
+        // Управление видимостью подменю
+        document.querySelectorAll('.submenu').forEach(submenu => {
+            submenu.style.display = 'none';
+            adjustButtonMargins(submenu);
+        });
+
+        const submenu = document.getElementById(submenuId);
+        if (submenu) {
+            submenu.style.display = 'block';
+            adjustButtonMargins(submenu);
+        }
+    }
+
+    function adjustButtonMargins(submenu) {
+        // Устанавливаем отступы для всех кнопок в подменю
+        let buttons = submenu.querySelectorAll('.btn');
+        buttons.forEach(button => button.style.marginBottom = '10px');
+
+        // Убираем отступ у последней кнопки
+        if (buttons.length) {
+            buttons[buttons.length - 1].style.marginBottom = '0';
+        }
+    }
+
+    function showResponse(responseText, imageUrl) {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML = ''; // Очищаем содержимое chat-box
+
+        let message = '';
+        if (imageUrl) {
+            // Добавляем уникальный параметр к URL изображения для предотвращения кэширования
+            const uniqueImageUrl = imageUrl + "?t=" + new Date().getTime();
+            message += `<div class="img-container" style="margin-bottom: 20px;"><img src="${uniqueImageUrl}" alt="Image" style="max-width: 100%; height: auto;"></div>`;
+        }
+        message += `<div style="color:#FFF9CF;">${responseText}</div>`;
+        chatBox.innerHTML = message;
+    }
+</script>
+
+{% endblock %}

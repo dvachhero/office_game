@@ -79,8 +79,10 @@
                     <th onclick="sortTable(2)">Битрикс ID</th>
                     <th onclick="sortTable(3)">Вопрос</th>
                     <th onclick="sortTable(4)">Ответ пользователя</th>
-                    <th onclick="sortTable(5)">Правильный ответ</th>
-                    <th onclick="sortTable(6)">Правильных / Неправильных ответов</th>
+                    <th onclick="sortTable(6)">Правильный ответ</th>
+                    <th onclick="sortTable(7)">Ответственное лицо</th>
+                    <th onclick="sortTable(8)">Должность ответственного</th>
+                    <th onclick="sortTable(9)">Битрикс ID ответственного</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,7 +94,9 @@
                     <td>{{ item.question_text }}</td>
                     <td>{{ item.user_answer }}</td>
                     <td>{{ item.right_answer }}</td>
-                    <td>{{ item.user_correct_answers.correct }} / {{ item.user_correct_answers.incorrect }}</td>
+                    <td>{{ item.responsible.full_name }}</td>
+                    <td>{{ item.responsible.position }}</td>
+                    <td>{{ item.responsible.bitrix_id }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -173,19 +177,17 @@ function sendMessage() {
     var selectedUsers = document.querySelectorAll('.userCheckbox:checked');
 
     selectedUsers.forEach(function(user) {
+
         var bitrixId = user.value;
         var userRow = user.closest('tr');
         var questionText = userRow.cells[3].innerText;
         var userAnswer = userRow.cells[4].innerText;
         var rightAnswer = userRow.cells[5].innerText;
-        var correctCount = userRow.cells[6].innerText.split('/')[0].trim();
-        var incorrectCount = userRow.cells[6].innerText.split('/')[1].trim();
+        var fullName = userRow.cells[1].innerText;
 
-            var customMessage = "Привет! Твои результаты теста:\nВопрос: " + questionText +
+            var customMessage = "Привет! " + fullName + "! \nТвои результаты теста курса молодого бойца:\nВопрос: " + questionText +
                                 "\nТвой ответ:" + userAnswer +
-                                "\nПравильный ответ: " + rightAnswer +
-                                "\nПравильных: " + correctCount +
-                                "\nНеправильных: " + incorrectCount;
+                                "\nПравильный ответ: " + rightAnswer;
 
         var url = "https://portal.tk-kit.net/rest/15946/i6gqvnma9qmxt8ur/im.message.add.json?DIALOG_ID=" + bitrixId + "&MESSAGE=" + encodeURIComponent(customMessage);
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from users.models import UserProfiles
-from game.models import AnswerOfficeGame
+from users.models import UserProfiles, ResponsiblePerson
+from game.models import AnswerOfficeGame, AnswerTraining, KmbAnswerOffice
 
 def admin_menu(request):
     return render(request, 'admin_menu.html')
@@ -41,3 +41,51 @@ def send_result_b24(request):
     results = sorted(results, key=lambda x: (x['full_name'], x['question_text']))
 
     return render(request, 'send_result_b24.html', {'results': results})
+
+def send_result_training_b24(request):
+    answers = AnswerTraining.objects.select_related('user').all()
+
+    results = []
+    for answer in answers:
+        user_profile = UserProfiles.objects.filter(user=answer.user).first()
+
+        if user_profile:
+            responsible_person = ResponsiblePerson.objects.filter(id=user_profile.responsible_person_id).first()
+            result = {
+                'full_name': user_profile.full_name,
+                'division': user_profile.division.name if user_profile.division else '',
+                'position': user_profile.position.title if user_profile.position else '',
+                'bitrix_id': user_profile.bitrix_id,
+                'correct_sequence': answer.correct_sequence,
+                'responsible': {
+                    'full_name': responsible_person.full_name if responsible_person else '',
+                    'position': responsible_person.position.title if responsible_person and responsible_person.position else '',
+                    'bitrix_id': responsible_person.bitrix_id if responsible_person else '',
+                }
+            }
+            results.append(result)
+
+    return render(request, 'send_result_training_b24.html', {'results': results})
+
+def send_result_kmb_b24(request):
+    kmb_answers_data = KmbAnswerOffice.objects.select_related('user__profile', 'question').all()
+
+    results = []
+    for answer in kmb_answers_data:
+        user_profile = UserProfiles.objects.filter(user=answer.user).first()
+        responsible_person = ResponsiblePerson.objects.filter(id=user_profile.responsible_person_id).first() if user_profile else None
+
+        results.append({
+            'full_name': user_profile.full_name if user_profile else 'Неизвестный пользователь',
+            'bitrix_id': user_profile.bitrix_id if user_profile else 'Нет ID',
+            'question_text': answer.question.question_text,
+            'user_answer': answer.answer,
+            'right_answer': answer.right_answer,
+            'responsible': {
+                'full_name': responsible_person.full_name if responsible_person else '',
+                'position': responsible_person.position.title if responsible_person and responsible_person.position else '',
+                'bitrix_id': responsible_person.bitrix_id if responsible_person else '',
+            }
+        })
+
+    return render(request, 'send_result_kmb_b24.html', {'results': results})

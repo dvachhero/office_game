@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     .wide-container {
-        max-width: 50%; /* Снимаем ограничение ширины */
+        max-width: 60%; /* Снимаем ограничение ширины */
         overflow-x: auto; /* Добавляем горизонтальный скролл при необходимости */
         background-color: #333333;
         border: 2px solid #FFF9CF;
@@ -76,11 +76,13 @@
                 <tr>
                     <th><input type="checkbox" id="selectAll"></th>
                     <th onclick="sortTable(1)">ФИО</th>
-                    <th onclick="sortTable(2)">Битрикс ID</th>
-                    <th onclick="sortTable(3)">Вопрос</th>
-                    <th onclick="sortTable(4)">Ответ пользователя</th>
-                    <th onclick="sortTable(5)">Правильный ответ</th>
-                    <th onclick="sortTable(6)">Правильных / Неправильных ответов</th>
+                    <th onclick="sortTable(2)">Дивизион</th>
+                    <th onclick="sortTable(3)">Должность</th>
+                    <th onclick="sortTable(4)">Битрикс ID</th>
+                    <th onclick="sortTable(5)">Ответственное лицо</th>
+                    <th onclick="sortTable(6)">Должность ответственного</th>
+                    <th onclick="sortTable(7)">Битрикс ID ответственного</th>
+                    <th onclick="sortTable(8)">Правильных ответов подряд</th>
                 </tr>
             </thead>
             <tbody>
@@ -88,11 +90,13 @@
                 <tr>
                     <td><input type="checkbox" class="userCheckbox" value="{{ item.bitrix_id }}"></td>
                     <td>{{ item.full_name }}</td>
+                    <td>{{ item.division }}</td>
+                    <td>{{ item.position }}</td>
                     <td>{{ item.bitrix_id }}</td>
-                    <td>{{ item.question_text }}</td>
-                    <td>{{ item.user_answer }}</td>
-                    <td>{{ item.right_answer }}</td>
-                    <td>{{ item.user_correct_answers.correct }} / {{ item.user_correct_answers.incorrect }}</td>
+                    <td>{{ item.responsible.full_name }}</td>
+                    <td>{{ item.responsible.position }}</td>
+                    <td>{{ item.responsible.bitrix_id }}</td>
+                    <td>{{ item.correct_sequence }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -100,7 +104,7 @@
         <button type="button" onclick="sendMessage()">Отправить сообщение</button>
     </form>
 <script>
-        // Функция для сортировки таблицы
+    // Функция для сортировки таблицы
     function sortTable(n) {
         var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
         table = document.getElementById("messageForm");
@@ -169,50 +173,50 @@
     });
 
     // Функция отправки сообщений
-function sendMessage() {
-    var selectedUsers = document.querySelectorAll('.userCheckbox:checked');
+    function sendMessage() {
+        var selectedUsers = document.querySelectorAll('.userCheckbox:checked');
 
-    selectedUsers.forEach(function(user) {
-        var bitrixId = user.value;
-        var userRow = user.closest('tr');
-        var questionText = userRow.cells[3].innerText;
-        var userAnswer = userRow.cells[4].innerText;
-        var rightAnswer = userRow.cells[5].innerText;
-        var correctCount = userRow.cells[6].innerText.split('/')[0].trim();
-        var incorrectCount = userRow.cells[6].innerText.split('/')[1].trim();
+        selectedUsers.forEach(function(user) {
+            var bitrixId = user.value;
+            var userRow = user.closest('tr');
+            // Обновите индексы ячеек в соответствии с новой структурой таблицы
+            var fullName = userRow.cells[1].innerText;
+            var division = userRow.cells[2].innerText;
+            var position = userRow.cells[3].innerText;
+            var responsibleFullName = userRow.cells[5].innerText;
+            var responsiblePosition = userRow.cells[6].innerText;
+            var correctCount = userRow.cells[8].innerText;
 
-            var customMessage = "Привет! Твои результаты теста:\nВопрос: " + questionText +
-                                "\nТвой ответ:" + userAnswer +
-                                "\nПравильный ответ: " + rightAnswer +
-                                "\nПравильных: " + correctCount +
-                                "\nНеправильных: " + incorrectCount;
+            var customMessage = "Привет, " + fullName + "! Твои результаты:\nДивизион: " + division +
+                                "\nДолжность: " + position +
+                                "\nПравильных ответов подряд: " + correctCount;
 
-        var url = "https://portal.tk-kit.net/rest/15946/i6gqvnma9qmxt8ur/im.message.add.json?DIALOG_ID=" + bitrixId + "&MESSAGE=" + encodeURIComponent(customMessage);
+            var url = "https://portal.tk-kit.net/rest/15946/i6gqvnma9qmxt8ur/im.message.add.json?DIALOG_ID=" + bitrixId + "&MESSAGE=" + encodeURIComponent(customMessage);
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         });
-    });
 
-    if (selectedUsers.length > 0) {
-        alert('Сообщения отправлены.');
-    } else {
-        console.log("Не выбраны пользователи для отправки");
+        if (selectedUsers.length > 0) {
+            alert('Сообщения отправлены.');
+        } else {
+            console.log("Не выбраны пользователи для отправки");
+        }
     }
-}
 </script>
 
-     <button onclick="window.location.href='{% url 'adminmenu' %}'">Вернуться в администраторское меню</button>
+    <button onclick="window.location.href='{% url 'adminmenu' %}'">Вернуться в администраторское меню</button>
 </div>
 
 {% endblock %}

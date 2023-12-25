@@ -3,8 +3,8 @@
 {% block content %}
 <style>
     .wide-container {
-        max-width: 50%; /* Снимаем ограничение ширины */
-        overflow-x: auto; /* Добавляем горизонтальный скролл при необходимости */
+        max-width: 50%;
+        overflow-x: auto;
         background-color: #333333;
         border: 2px solid #FFF9CF;
         border-radius: 10px;
@@ -69,17 +69,19 @@
 </style>
 
 <div class="wide-container">
+    <!-- Поле поиска -->
+    <input type="text" id="searchInput" placeholder="Поиск в таблице" onkeyup="filterProfiles()">
     <form id="messageForm">
         <table>
             <thead>
                 <tr>
                     <th><input type="checkbox" id="selectAll"></th>
-                    <th>ФИО</th>
-                    <th>Дивизион</th>
-                    <th>Город</th>
-                    <th>Должность</th>
-                    <th>Ответственное лицо</th>
-                    <th>Битрикс ID</th>
+                    <th onclick="sortTable(1)">ФИО</th>
+                    <th onclick="sortTable(2)">Дивизион</th>
+                    <th onclick="sortTable(3)">Город</th>
+                    <th onclick="sortTable(4)">Должность</th>
+                    <th onclick="sortTable(5)">Ответственное лицо</th>
+                    <th onclick="sortTable(6)">Битрикс ID</th>
                 </tr>
             </thead>
             <tbody>
@@ -100,8 +102,74 @@
         <button type="button" onclick="sendMessage()">Отправить сообщение</button>
     </form>
 
+    <button onclick="window.location.href='{% url 'adminmenu' %}'">Вернуться в администраторское меню</button>
+</div>
+
 
 <script>
+        // Функция для сортировки таблицы
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("messageForm");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.getElementsByTagName("tr");
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+
+    // Обновленная функция для фильтрации таблицы
+    function filterProfiles() {
+        var input, filter, table, tr, td, i, j, txtValue, shouldDisplay;
+        input = document.getElementById("searchInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("messageForm");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) { // Начинаем с 1, чтобы пропустить заголовки
+            td = tr[i].getElementsByTagName("td");
+            shouldDisplay = false;
+            for (j = 0; j < td.length; j++) {
+                if (td[j]) {
+                    txtValue = td[j].textContent || td[j].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        shouldDisplay = true;
+                        break;
+                    }
+                }
+            }
+            tr[i].style.display = shouldDisplay ? "" : "none";
+        }
+    }
+
+
     document.getElementById('selectAll').addEventListener('change', function (e) {
         var checkboxes = document.getElementsByClassName('profileCheckbox');
         for (var i = 0; i < checkboxes.length; i++) {
@@ -140,6 +208,5 @@
     }
 </script>
 
-<button onclick="window.location.href='{% url 'adminmenu' %}'">Вернуться в администраторское меню</button>
     </div>
 {% endblock %}

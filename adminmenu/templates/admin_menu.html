@@ -14,10 +14,13 @@
 
     {% block content %}
 <div class="container">
-    <h1>Меню Администратора</h1>
+    <h1>Меню администратора</h1>
     <div class="menu">
         <button onclick="window.location.href='{% url 'send_message_b24' %}'">Отправка сообщений пользователям</button>
-        <button onclick="window.location.href='{% url 'send_result_b24' %}'">Отправка результатов пользователям</button>
+        <button onclick="window.location.href='{% url 'send_result_b24' %}'">Отправка результатов старт</button>
+        <button onclick="window.location.href='{% url 'send_result_training_b24' %}'">Отправка результатов тренировка</button>
+        <button onclick="window.location.href='{% url 'send_result_kmb_b24' %}'">Отправка результатов КМБ</button>
+        <button onclick="window.location.href='{% url 'admin:index' %}'">Переход в админскую панель</button>
         <button onclick="window.location.href='{% url 'home' %}'">Вернуться в меню приложения</button>
     </div>
 </div>

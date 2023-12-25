@@ -17,11 +17,11 @@
     <div class="menu">
       <button onclick="window.location.href='{% url 'gamemenu' %}'">Игровое меню</button>
       <button onclick="window.location.href='{% url 'kmb' %}'">Курс молодого бойца</button>
-      <button onclick="window.location.href='{% url 'rules' %}'">Правила</button>
+      <button onclick="window.location.href='{% url 'chat_page' %}'">КИТ.Ментор</button>
+      <button onclick="window.location.href='https://t.me/kitoffice'">Канал Телеграм</button>
       <button onclick="window.location.href='{% url 'logout' %}'">Выйти из приложения</button>
-
       {% if request.user.is_staff %}
-      <button onclick="window.location.href='{% url 'adminmenu' %}'">Администраторское меню</button>
+      <button onclick="window.location.href='{% url 'adminmenu' %}'">Меню администратора</button>
       {% endif %}
     </div>
 </div>

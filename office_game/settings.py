@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'users',
     'tutorial',
     'adminmenu',
+    'bot',
 ]
 
 MIDDLEWARE = [

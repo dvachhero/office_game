@@ -164,6 +164,25 @@
                 margin-bottom: 0;
             }
 
+            #searchInput {
+                background-color: #333333; /* Фоновый цвет */
+                color: #FFF9CF;            /* Цвет текста */
+                border: 1px solid #FFF9CF; /* Цвет обводки */
+                padding: 10px;             /* Внутренний отступ */
+                border-radius: 5px;        /* Скругление углов */
+                margin-bottom: 10px;       /* Отступ снизу */
+                width: auto;               /* Ширина */
+            }
+
+            #searchInput::placeholder {
+                color: #FFF9CF; /* Цвет текста подсказки */
+            }
+
+            #searchInput:focus {
+                outline: none; /* Убрать стандартную рамку при фокусе */
+                box-shadow: 0 0 10px #FFF9CF; /* Добавить тень при фокусе */
+            }
+
             @media screen and (max-width: 768px) {
                 .container {
                     width: 80%;
